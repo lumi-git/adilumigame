@@ -1,7 +1,7 @@
 'use client';
 import { SetStateAction, useEffect, useState } from 'react'
 
-import io from 'Socket.io-client'
+import io from 'socket.io-client'
 let socket:any;
 
 const Home = () => {
