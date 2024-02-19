@@ -10,7 +10,6 @@ export class point extends GameObject {
         this.getTransform().setScale(new Vector2(10,10));
         this.addDrawComponent(this.gfx);
         this.addColliderComponent(new ColliderComponent(this));
-
     }
 
     onCollision(collider: ColliderComponent): void {

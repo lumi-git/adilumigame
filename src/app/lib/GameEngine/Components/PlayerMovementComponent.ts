@@ -28,7 +28,7 @@ export class PlayerMovementComponent extends Component {
             amountToMove.setY(scaledSpeed);
         }
         amountToMove.normalize();
-        this.getParent().asyncMove( this.getParent().getTransform().getPosition().add(amountToMove));
+        this.getParent().getTransform().getPosition().selfAdd(amountToMove)
         
 
     }

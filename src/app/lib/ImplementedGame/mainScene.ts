@@ -2,6 +2,8 @@
 import { Scene } from "../GameEngine/Scene";
 import type p5 from "p5";
 import { point } from "./point";
+import { player } from "./player";
+import { Game } from "../GameEngine/Game";
 
 
 export class mainScene extends Scene {
@@ -12,11 +14,12 @@ export class mainScene extends Scene {
 
     start(p: p5) {
 
+        this.addObject(new player());
 
         p.mouseClicked = () => {
             var pt = new point();
-            pt.getTransform().getPosition().setX(p.mouseX);
-            pt.getTransform().getPosition().setY(p.mouseY);
+            pt.getTransform().getPosition().setX(Game.getInstance().getMousePosition().getX());
+            pt.getTransform().getPosition().setY(Game.getInstance().getMousePosition().getY());
             this.addObject(pt);
         }
 
@@ -27,6 +30,9 @@ export class mainScene extends Scene {
             pt.getTransform().getPosition().setY(p.random()*p.windowHeight);
             this.addObject(pt);
         }
+
+
+
     }
 
 }
