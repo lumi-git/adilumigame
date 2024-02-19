@@ -1,12 +1,12 @@
 export class gameRequest {
     Type: string;
-    ClientID: number;
+    ClientID: string;
     Metadata: any;
     RoomID : number;
 
     constructor(type: string) {
         this.Type = type;
-        this.ClientID = -1;
+        this.ClientID = "";
         this.RoomID  = -1;
         this.Metadata = {};
     }
@@ -19,11 +19,11 @@ export class gameRequest {
         this.addMetadata("objectData", value);
     }
 
-    setClientID(id: number) {
+    setClientID(id: string) {
         this.ClientID = id;
     }
 
-    getClientID(id: number):number {
+    getClientID():string {
         return this.ClientID;
     }
 

@@ -1,4 +1,4 @@
-import { Game } from "./Game";
+import { Game } from "../Game";
 
 export class ServersideGame extends Game {
     static instance:ServersideGame;

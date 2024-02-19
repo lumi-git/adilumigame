@@ -14,6 +14,7 @@ const Sketch = () => {
     import('p5').then((p5Module) => {
 
       Game.getInstance().setScene(new mainScene());
+      socketWrapper.getInstance().addSubscriber(Game.getInstance());
 
       sketch = new p5Module.default((p: p5) => {
         p.setup = () => {

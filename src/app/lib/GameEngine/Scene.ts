@@ -99,7 +99,6 @@ export abstract class Scene {
     }
 
     UpdateState(serverState: any) {
-        console.log("updating state");
         const serverIds = new Set<number>();
     
         // Iterate over server state to update and add new objects
@@ -122,9 +121,6 @@ export abstract class Scene {
                 }
             }
         }
-        //const localObjectIds = new Set<number>(this.gameObjects.keys());
-        //const objectsToRemove = Array.from(localObjectIds).filter(id => !serverIds.has(id) && id > 0);
-        //objectsToRemove.forEach(id => this.removeObjectById(id));
 
     }
 

@@ -10,9 +10,6 @@ import { gameRequest } from './gameRequest';
 import { gameRequestFactory } from './gameRequestFactory';
 
 export class Game extends messageSubscriber{
-
-
-
     static instance:Game;
     
     protected sender: RequestSender;
