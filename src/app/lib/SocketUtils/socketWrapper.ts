@@ -3,6 +3,7 @@ import { Socket, io } from "socket.io-client";
 class socketWrapper {
     static instance:socketWrapper;
     socket:Socket;
+    gameRequestCallback:Function;
     constructor() {
         this.socket = io();
     }
@@ -14,9 +15,22 @@ class socketWrapper {
         return socketWrapper.instance;
     }
 
+    setgameRequestCallback(callback:Function){
+        this.gameRequestCallback = callback;
+    }
+
+
+    getID(){
+        return this.socket.id;
+    }
+
     initSocket(){
         fetch('/api/socket')
         this.socket.on('connect', () => {
+        });
+
+        this.socket.on('Gamerequest', (data:any) => {
+            this.gameRequestCallback(data);
         });
     }
 

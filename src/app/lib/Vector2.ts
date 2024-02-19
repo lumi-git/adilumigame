@@ -153,4 +153,10 @@ export class Vector2 {
         this.x += (end.x - this.x) * factor;
         this.y += (end.y - this.y) * factor;
     }
+
+
+    static fromJson(json: any): Vector2 {
+        return new Vector2(json.x, json.y);
+    }
+
 }
