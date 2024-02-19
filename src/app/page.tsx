@@ -1,44 +1,49 @@
 'use client';
-import { SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect } from 'react';
+import type p5 from 'p5';
+import { Game } from './lib/GameEngine/Game';
+import socketWrapper from './lib/SocketUtils/socketWrapper';
+import { mainScene } from './lib/ImplementedGame/mainScene';
 
-import io from 'socket.io-client'
-let socket:any;
+let sketch: p5;
+const Sketch = () => {
+  useEffect(() => {
 
-const Home = () => {
-  const [input, setInput] = useState('')
+    socketWrapper.getInstance().initSocket();
 
-  useEffect( () => {
-    fetch('/api/socket')
-    async function socketInitializer(){
-      socket = io()
-      socket.on('connect', () => {
-        console.log('connected')
-      })
-      socket.on('update-input', (msg: SetStateAction<string>) => {
-        setInput(msg)
-      })
+    import('p5').then((p5Module) => {
+
+      Game.getInstance().setScene(new mainScene());
+
+      sketch = new p5Module.default((p: p5) => {
+        p.setup = () => {
+          p.createCanvas(p.windowWidth, p.windowHeight);
+          p.windowResized = () => {
+            p.resizeCanvas(p.windowWidth, p.windowHeight);
+          };
+          Game.getInstance().Mstart(p);
+        };
+
+        p.draw = () => {
+          p.background('#101010');
+          Game.getInstance().runFrame(p);
+        };
+      });
+
+      // Cleanup on component unmount
       return () => {
-        socket.close();
+        sketch.remove();
+        Game.getInstance().end();
+        socketWrapper.getInstance().socket.disconnect();
       };
-    }
-    socketInitializer();
-  }, [])
-
-  const onChangeHandler = (e:any) => {
-    setInput(e.target.value)
-    socket.emit('input-change', e.target.value)
-  }
+    });
+  }, []);
 
   return (
-    <div>
-      <h1>Hello</h1>
-      <input className = "text-black"
-            placeholder="Type something"
-            value={input}
-            onChange={onChangeHandler}
-      />
+    <div className="App">
+      <div id="canvas-container"></div>
     </div>
-  )
-}
+  );
+};
 
-export default Home;
+export default Sketch;
