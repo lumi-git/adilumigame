@@ -11,6 +11,7 @@ import { building } from './lib/building';
 import { driver } from './lib/driver';
 import { Selectable } from './lib/selectable';
 
+import  {Bird}  from 'lucide-react';
 
 let sketch: p5;
 const Sketch = () => {
@@ -134,7 +135,9 @@ const Sketch = () => {
 
   return (
     <div className="App">
+      <Bird size={32} className="m-2"/>
       <div id="canvas-container" ></div>
+      
     </div>
   );
 };
