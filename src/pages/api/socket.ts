@@ -6,6 +6,7 @@ import { restaurant } from '@/app/lib/restaurant';
 import { Road } from '@/app/lib/Road';
 import { Server } from 'socket.io';
 import { driver } from '@/app/lib/driver';
+import { intersection } from '@/app/lib/intersection';
 
 const SocketHandler = (req:any, res:any) => {
 
@@ -45,16 +46,21 @@ const SocketHandler = (req:any, res:any) => {
     const io = new Server(res.socket.server);
     res.socket.server.io = io;
 
-    var nbHouses = 100;
-    var nbRestaurants = 100;
-    var nbbuilds = nbHouses + nbRestaurants;
+    var nbHouses = 10;
+    var nbRestaurants = 10;
+    var nbIntersections = 5;
+    var nbbuilds = nbHouses + nbRestaurants + nbIntersections;
 
-    for (var i = 0; i < nbHouses; i++){
-      builds.push(new restaurant(i.toString(), "restaurant " + i.toString(), new Vector2(i*10,Math.random()*500))); 
+    var id = 0;
+
+    for (var i = 0; i < nbRestaurants; i++, id++){
+      builds.push(new restaurant(id.toString(), "restaurant " + i.toString(), new Vector2(i*10,Math.random()*500)));
     }
-
-    for (var i = nbHouses; i < nbbuilds; i++){
-      builds.push(new house(i.toString(), "house " + i.toString(), new Vector2(i*10,Math.random()*500))); 
+    for (var i = 0; i < nbHouses; i++, id++){
+      builds.push(new house(id.toString(), "house " + i.toString(), new Vector2(i*10,Math.random()*500)));
+    }
+    for (var i = 0; i < nbIntersections; i++, id++){
+      builds.push(new intersection(id.toString(), new Vector2(Math.random()*500,Math.random()*500)));
     }
 
     for (var i = 0; i < nbbuilds-1; i++){

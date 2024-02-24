@@ -12,6 +12,7 @@ import { driver } from './lib/driver';
 import { Selectable } from './lib/selectable';
 
 import  {Bird}  from 'lucide-react';
+import { intersection } from './lib/intersection';
 
 let sketch: p5;
 const Sketch = () => {
@@ -28,13 +29,24 @@ const Sketch = () => {
       drivers = [];
       console.log(data);
       for (var iterbuilds of data.builds){
-        if (iterbuilds.type == "house"){
-          var h = new house(iterbuilds.id, iterbuilds.name, new Vector2(iterbuilds.location.x,iterbuilds.location.y));
-          builds.set(iterbuilds.id,h);
-        }
-        if (iterbuilds.type == "restaurant"){
-          var rest = new restaurant(iterbuilds.id, iterbuilds.name, new Vector2(iterbuilds.location.x,iterbuilds.location.y));
-          builds.set(iterbuilds.id,rest);
+        switch(iterbuilds.type){
+          case "house":
+            var h = new house(iterbuilds.id, iterbuilds.name, new Vector2(iterbuilds.location.x,iterbuilds.location.y));
+            builds.set(iterbuilds.id,h);
+            break;
+          case "restaurant":
+            var rest = new restaurant(iterbuilds.id, iterbuilds.name, new Vector2(iterbuilds.location.x,iterbuilds.location.y));
+            builds.set(iterbuilds.id,rest);
+            break;
+          case "intersection":
+            var inter = new intersection(iterbuilds.id, new Vector2(iterbuilds.location.x,iterbuilds.location.y));
+            builds.set(iterbuilds.id,inter);
+            break;
+          default:
+            {
+              console.log("error");
+              break;
+          }
         }
       }
 
