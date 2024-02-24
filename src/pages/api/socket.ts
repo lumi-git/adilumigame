@@ -1,4 +1,3 @@
-import socketWrapper from '@/app/lib/SocketUtils/socketWrapper';
 import { Vector2 } from '@/app/lib/Vector2';
 import { building } from '@/app/lib/building';
 import { clientState } from '@/app/lib/clientState';
@@ -46,16 +45,16 @@ const SocketHandler = (req:any, res:any) => {
     const io = new Server(res.socket.server);
     res.socket.server.io = io;
 
-    var nbHouses = 10;
-    var nbRestaurants = 10;
+    var nbHouses = 100;
+    var nbRestaurants = 100;
     var nbbuilds = nbHouses + nbRestaurants;
 
     for (var i = 0; i < nbHouses; i++){
-      builds.push(new restaurant(i.toString(), "restaurant " + i.toString(), new Vector2(Math.random()*1000,Math.random()*1000))); 
+      builds.push(new restaurant(i.toString(), "restaurant " + i.toString(), new Vector2(i*10,Math.random()*500))); 
     }
 
     for (var i = nbHouses; i < nbbuilds; i++){
-      builds.push(new house(i.toString(), "house " + i.toString(), new Vector2(Math.random()*1000,Math.random()*1000))); 
+      builds.push(new house(i.toString(), "house " + i.toString(), new Vector2(i*10,Math.random()*500))); 
     }
 
     for (var i = 0; i < nbbuilds-1; i++){

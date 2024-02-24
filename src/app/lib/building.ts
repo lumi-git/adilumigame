@@ -7,15 +7,14 @@ export class building extends Selectable {
     name: string;
     buildingType: string;
 
-    constructor(id: string, name: string, location: Vector2) {
-        super(location,id);
+    constructor(id: string, name: string, location: Vector2,size:Vector2) {
+        super(location,size,id);
         this.name = name;
         this.type = "building";
         this.buildingType = "default";
     }
 
     draw(p:p5){
-
     }
 
     update(p:p5){

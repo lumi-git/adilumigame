@@ -103,16 +103,21 @@ const Sketch = () => {
           for (var b of builds.values()){
             b.update(p);
             if (b.hoovered){
-              p.text(b.name, p.mouseX, p.mouseY);
               selected = b;
             }
           }
           for(var road of roads){
-            p.stroke(255);
-            var startbuild = builds.get(road.startid).location;
-            var endbuild = builds.get(road.endid).location;
-            p.line(startbuild.getX(),startbuild.getY(),endbuild.getX(),endbuild.getY());
+            p.stroke(255,255,255,100);
+            var startbuild = builds.get(road.startid);
+            var endbuild = builds.get(road.endid);
+            p.strokeWeight(5);
+  
+            p.line(startbuild.location.getX() + startbuild.size.getX()/2,startbuild.location.getY()+ startbuild.size.getY()/2,endbuild.location.getX()+ startbuild.size.getX()/2,endbuild.location.getY()+ startbuild.size.getY()/2);
+            
           }
+
+          p.noStroke();
+          p.strokeWeight(0);
 
           for (var d of drivers){
             d.update(p);
