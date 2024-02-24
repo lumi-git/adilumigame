@@ -110,9 +110,9 @@ const Sketch = () => {
             p.stroke(255,255,255,100);
             var startbuild = builds.get(road.startid);
             var endbuild = builds.get(road.endid);
-            p.strokeWeight(5);
+            p.strokeWeight(20);
   
-            p.line(startbuild.location.getX() + startbuild.size.getX()/2,startbuild.location.getY()+ startbuild.size.getY()/2,endbuild.location.getX()+ startbuild.size.getX()/2,endbuild.location.getY()+ startbuild.size.getY()/2);
+            p.line(startbuild.location.getX() + startbuild.size.getX()/2,startbuild.location.getY()+ startbuild.size.getY()/2,endbuild.location.getX()+ endbuild.size.getX()/2,endbuild.location.getY()+ endbuild.size.getY()/2);
             
           }
 
