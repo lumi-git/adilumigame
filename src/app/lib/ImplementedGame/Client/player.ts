@@ -1,10 +1,10 @@
-import { ColliderComponent } from "../GameEngine/Components/ColliderComponent";
-import { DrawRectangleComponent } from "../GameEngine/Components/DrawRectangleComponent";
-import { PlayerMovementComponent } from "../GameEngine/Components/PlayerMovementComponent";
-import { GameObject } from "../GameEngine/GameObject";
-import { Serializable } from "../GameEngine/Serialized";
-import { Vector2 } from "../GameEngine/Vector2";
-import socketWrapper from "../SocketUtils/socketWrapper";
+import { ColliderComponent } from "../../GameEngine/Components/ColliderComponent";
+import { DrawRectangleComponent } from "../../GameEngine/Components/DrawRectangleComponent";
+import { PlayerMovementComponent } from "../../GameEngine/Components/PlayerMovementComponent";
+import { GameObject } from "../../GameEngine/GameObject";
+import { Serializable } from "../../GameEngine/Serialized";
+import { Vector2 } from "../../GameEngine/Vector2";
+import socketWrapper from "../../SocketUtils/socketWrapper";
 
 export class player extends GameObject {
 

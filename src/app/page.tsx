@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import type p5 from 'p5';
 import { Game } from './lib/GameEngine/Game';
 import socketWrapper from './lib/SocketUtils/socketWrapper';
-import { mainScene } from './lib/ImplementedGame/mainScene';
+import { mainScene } from './lib/ImplementedGame/Client/mainScene';
 
 let sketch: p5;
 const Sketch = () => {

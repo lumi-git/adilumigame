@@ -1,9 +1,9 @@
 
-import { Scene } from "../GameEngine/Scene";
+import { Scene } from "../../GameEngine/Scene";
 import type p5 from "p5";
 import { point } from "./point";
 import { player } from "./player";
-import { Game } from "../GameEngine/Game";
+import { Game } from "../../GameEngine/Game";
 
 export class mainScene extends Scene {
     constructor() {

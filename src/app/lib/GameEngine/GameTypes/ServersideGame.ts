@@ -1,6 +1,6 @@
-import { Game } from "../Game";
+import { AbstractGame } from "./AbstractGame";
 
-export class ServersideGame extends Game {
+export class ServersideGame extends AbstractGame {
     static instance:ServersideGame;
     constructor() {
         super();

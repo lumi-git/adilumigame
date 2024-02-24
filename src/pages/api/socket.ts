@@ -8,7 +8,7 @@ const SocketHandler = (req:any, res:any) => {
     const io = new Server(res.socket.server);
     res.socket.server.io = io;
     io.on('connection', (socket) => {
-      socket.on('message', (data) => {  
+      socket.on('message', (data) => {
         io.emit('message', data);
       });
     });

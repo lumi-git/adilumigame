@@ -17,7 +17,7 @@ export class Game extends messageSubscriber{
     protected collisionSystem: SpatialHashmap;
     protected scene: Scene;
 
-    protected RemoteRequestQueue: gameRequest[] = [];
+
 
     protected mousePosition:Vector2 = new Vector2(0,0); 
 
@@ -55,26 +55,25 @@ export class Game extends messageSubscriber{
         this.RemoteRequestQueue.push(req);
     }
 
-    handleRemoteRequests(){
-        for (var req of this.RemoteRequestQueue){
-            if (req.Type == "SpawnObject"){
-                var cls:any = this.scene.getTypeRegistry().getTypeClass(req.Metadata.objectData.Type)
-                this.scene.addObject((cls)!.fromSerialized(req.Metadata.objectData));
-            }else
+    onRequest(req: gameRequest){
 
-            if (req.Type == "DestroyObject"){
-                this.scene.removeObjectById(req.Metadata.objectData.id);
-            }else
+        if (req.Type == "SpawnObject"){
+            var cls:any = this.scene.getTypeRegistry().getTypeClass(req.Metadata.objectData.Type)
+            this.scene.addObject((cls)!.fromSerialized(req.Metadata.objectData));
+        }else
 
-            if(req.Type == "FullState"){
-                this.scene.UpdateState(req.Metadata.objectData);
-            }else
+        if (req.Type == "DestroyObject"){
+            this.scene.removeObjectById(req.Metadata.objectData.id);
+        }else
 
-            if (req.Type == "UpdateObject"){
-                this.scene.updateObject(req.Metadata.objectData.id,req.Metadata.objectData);
-            }
+        if(req.Type == "FullState"){
+            this.scene.UpdateState(req.Metadata.objectData);
+        }else
+
+        if (req.Type == "UpdateObject"){
+            this.scene.updateObject(req.Metadata.objectData.id,req.Metadata.objectData);
         }
-        this.RemoteRequestQueue = [];
+
     }
 
     start(p:p5){
