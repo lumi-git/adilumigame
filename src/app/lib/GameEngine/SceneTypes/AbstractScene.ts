@@ -42,9 +42,6 @@ export abstract class AbstractScene {
 
     addObject(obj: GameObject){
         obj.Mstart();
-        if (obj.getId() == -1){
-            obj.setId(this.getnewLocalObjectId());
-        }
         this.addObjectByTag(obj);
         this.gameObjects.set(obj.getId(),obj);
     }
