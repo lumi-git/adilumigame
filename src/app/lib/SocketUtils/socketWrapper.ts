@@ -1,14 +1,15 @@
 import { Socket, io } from "socket.io-client";
 import { gameRequest } from "../GameEngine/gameRequest";
 import { messageSubscriber } from "../GameEngine/messageSubscriber";
+import AbsSocketWrapper from "./AbsSocketWrapprt";
 
-class socketWrapper {
+class socketWrapper extends AbsSocketWrapper {
 
-    private subscribers:messageSubscriber[] = [];
 
     static instance:socketWrapper;
     socket:Socket;
     constructor() {
+        super();
         this.socket = io();
     }
 

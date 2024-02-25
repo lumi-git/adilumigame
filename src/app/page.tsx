@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect } from 'react';
 import type p5 from 'p5';
-import { Game } from './lib/GameEngine/Game';
 import socketWrapper from './lib/SocketUtils/socketWrapper';
-import { mainScene } from './lib/ImplementedGame/Client/mainScene';
+import { mainScene } from './lib/ImplementedGame/mainScene';
+import { ClientGame } from './lib/GameEngine/GameTypes/ClientGame';
 
 let sketch: p5;
 const Sketch = () => {
@@ -11,10 +11,13 @@ const Sketch = () => {
 
     socketWrapper.getInstance().initSocket();
 
+    while (socketWrapper.getInstance().socket === null) {
+    }
+
     import('p5').then((p5Module) => {
 
-      Game.getInstance().setScene(new mainScene());
-      socketWrapper.getInstance().addSubscriber(Game.getInstance());
+      ClientGame.getInstance().setScene(new mainScene());
+      socketWrapper.getInstance().addSubscriber(ClientGame.getInstance());
 
       sketch = new p5Module.default((p: p5) => {
         p.setup = () => {
@@ -22,19 +25,19 @@ const Sketch = () => {
           p.windowResized = () => {
             p.resizeCanvas(p.windowWidth, p.windowHeight);
           };
-          Game.getInstance().Mstart(p);
+          ClientGame.getInstance().Mstart(p);
         };
 
         p.draw = () => {
           p.background('#101010');
-          Game.getInstance().runFrame(p);
+          ClientGame.getInstance().runFrame(p);
         };
       });
 
       // Cleanup on component unmount
       return () => {
         sketch.remove();
-        Game.getInstance().end();
+        ClientGame.getInstance().end();
         socketWrapper.getInstance().socket.disconnect();
       };
     });

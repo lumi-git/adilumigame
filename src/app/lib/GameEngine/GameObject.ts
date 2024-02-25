@@ -2,12 +2,12 @@ import type p5 from "p5";
 import type { Camera } from "./Camera";
 import type { Component } from "./Component";
 import type { ColliderComponent } from "./Components/ColliderComponent";
-import { Game } from "./Game";
 import { Transform } from "./Transform";
 import { Vector2 } from "./Vector2";
 import type { drawComponent } from "./drawComponent";
 import { Serializable } from "./Serialized";
 import { SerializableGameObject } from "./SerializableGameObject";
+import { ClientGame } from "./GameTypes/ClientGame";
 
 export class GameObject extends SerializableGameObject{
     @Serializable
@@ -35,8 +35,14 @@ export class GameObject extends SerializableGameObject{
     private shouldDestroy: boolean = false;
     private cameraAttached: boolean = false;
 
+    private serverSide: boolean = false;
+    setServerSide (serverSide: boolean) {
+        this.serverSide = serverSide;
+    }
+
     constructor() {
         super();
+
         this.id = -1;
         this.transform = new Transform(0, 0, 0, 0);
         this.localTransform = new Transform(0, 0, 0, 0);
@@ -105,14 +111,24 @@ export class GameObject extends SerializableGameObject{
         this.colliderComponents.push(component);
     }
 
+    asyncStart(){
+    }
 
     start(){
 
     }
 
+    ServerStart(){
+    }
+
     Mstart(){
         this.components.forEach(component => component.start());
         this.start();
+    }
+
+    ServerMstart(){
+        this.components.forEach(component => component.start());
+        this.ServerStart();
     }
 
     asyncMove(vec:Vector2) {
@@ -133,6 +149,10 @@ export class GameObject extends SerializableGameObject{
     update(p:p5,dt:number) {
     }
 
+    ServerUpdate(dt:number) {
+        this.ServerUpdate(dt);
+    }
+
     Mupdate(p:p5,dt:number) {
         if (this.shouldBeDestroyed()){
             return;
@@ -141,8 +161,17 @@ export class GameObject extends SerializableGameObject{
         this.components.forEach(component => component.update(p,dt));
         this.update(p,dt);
         if (this.cameraAttached) {
-            Game.getInstance().getCamera().getTransform().setPosition(this.getTransform().getPosition().sub(new Vector2(p.width/2,p.height/2).sub(this.getTransform().getScale().scalMul(0.5))));
+            ClientGame.getInstance().getCamera().getTransform().setPosition(this.getTransform().getPosition().sub(new Vector2(p.width/2,p.height/2).sub(this.getTransform().getScale().scalMul(0.5))));
         }
+    }
+
+    ServerMupdate(dt:number) {
+        if (this.shouldBeDestroyed()){
+            return;
+        }
+        this.colliderComponents.forEach(component => component.ServerUpdate(dt));
+        this.components.forEach(component => component.ServerUpdate(dt));
+        this.ServerUpdate(dt);
     }
 
     draw(p:p5,camera: Camera) {
@@ -175,8 +204,17 @@ export class GameObject extends SerializableGameObject{
         this.end();
     }
 
+    ServerMend(){
+        this.components.forEach(component => component.end());
+        this.ServerEnd();
+    }
+
     end(){
         
+    }
+
+    ServerEnd(){
+    
     }
 
 }

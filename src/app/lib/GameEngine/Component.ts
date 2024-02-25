@@ -3,9 +3,13 @@ import type { GameObject } from "./GameObject";
 
 export class Component {
     private parent: GameObject;
-    
+    private serverSide: boolean = false;
     constructor(parent: GameObject) {
         this.parent = parent;
+    }
+
+    setServerSide (serverSide: boolean) {
+        this.serverSide = serverSide;
     }
 
     getParent() {
@@ -15,11 +19,23 @@ export class Component {
     start() {
     }
 
+    ServerStart() {
+        
+    }
+
     update(p: p5,dt:number) {
     
     }
 
+    ServerUpdate(dt:number) {
+        
+    }
+
     end() {
+    
+    }
+
+    Serverend() {
     
     }
 

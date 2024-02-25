@@ -1,7 +1,8 @@
-import { ColliderComponent } from "../../GameEngine/Components/ColliderComponent";
-import { DrawElipseComponent } from "../../GameEngine/Components/DrawElipseComponent";
-import { GameObject } from "../../GameEngine/GameObject";
-import { Vector2 } from "../../GameEngine/Vector2";
+import { ColliderComponent } from "../GameEngine/Components/ColliderComponent";
+import { DrawElipseComponent } from "../GameEngine/Components/DrawElipseComponent";
+import { GameObject } from "../GameEngine/GameObject";
+import { Vector2 } from "../GameEngine/Vector2";
+
 
 export class point extends GameObject {
     private gfx: DrawElipseComponent;
@@ -16,3 +17,4 @@ export class point extends GameObject {
         this.gfx.setColor("#00FF00");
     }
 }
+

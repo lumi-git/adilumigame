@@ -7,7 +7,7 @@ import { TypeRegistry } from "./TypeRegistry";
 import socketWrapper from "../SocketUtils/socketWrapper";
 
 export abstract class Scene {
-
+    private serverSide: boolean = false;
     //this counter will be decrease to avoid id conflicts with server objects
     LocalObjectIdCounter: number = -100;
     
@@ -26,7 +26,9 @@ export abstract class Scene {
         this.objectsByTag = new Map<string, GameObject[]>();
     }
 
-
+    setServerSide (serverSide: boolean) {
+        this.serverSide = serverSide;
+    }
 
     attachGame(game: Game){
         this.game = game;
@@ -36,9 +38,9 @@ export abstract class Scene {
         if (!this.objectsByTag.has(obj.getTag())){
             this.objectsByTag.set(obj.getTag(), []);
         }
+        obj.setServerSide(this.serverSide);
         this.objectsByTag.get(obj.getTag())?.push(obj);
     }
-
 
     getObjectsByTag(tag: string): GameObject[]{
         return this.objectsByTag.get(tag) || [];
@@ -48,8 +50,8 @@ export abstract class Scene {
         this.objectsByTag.get(obj.getTag())?.splice(this.objectsByTag.get(obj.getTag())?.indexOf(obj)!, 1);
     }
 
-
     addObject(obj: GameObject){
+        obj.setServerSide(this.serverSide);
         obj.Mstart();
         if (obj.getId() == -1){
             obj.setId(this.getnewLocalObjectId());
@@ -76,6 +78,8 @@ export abstract class Scene {
     }
 
     asyncAddObject(obj: GameObject){
+        obj.setServerSide(this.serverSide);
+        obj.asyncStart();
         var request = gameRequestFactory.getSpawnRequest();
         request.addMetadata("objectData", obj.toSerialized());
         this.sendToGame(request);
@@ -128,7 +132,6 @@ export abstract class Scene {
         this.gameObjects.get(id)?.updateFromRequest(state);
     }
 
-
     sendToGame(req: any){
        socketWrapper.getInstance().send(req);
     }
@@ -137,7 +140,15 @@ export abstract class Scene {
         this.start(p);
     }
 
+    ServerMstart(){
+        this.Serverstart();
+    }
+
     start(p:p5){
+    }
+
+    Serverstart(){
+            
     }
 
     Mupdate(p:p5,dt:number){
@@ -150,7 +161,22 @@ export abstract class Scene {
         this.update(p,dt);
     }
 
+    ServerMupdate(dt:number){
+        
+        for(var ob of this.gameObjects.values()){
+            ob.ServerMupdate(dt);
+            if (ob.shouldBeDestroyed()){
+                this.removeObject(ob);
+            }
+        }
+        this.ServerUpdate(dt);
+    }
+
     update(p:p5,dt:number){
+    }
+
+    ServerUpdate(dt:number){
+    
     }
 
     Mdraw(p:p5,camera: Camera){
@@ -178,9 +204,18 @@ export abstract class Scene {
         this.end()
     }
 
+    ServerMend(){
+        for(var ob of this.gameObjects.values()){
+            ob.Mend();
+        }
+        this.end()
+    }
+
     end(){
 
     }
-    
+
+    ServerEnd(){
+    }
 
 }

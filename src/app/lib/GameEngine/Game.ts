@@ -10,13 +10,11 @@ import { gameRequest } from './gameRequest';
 import { gameRequestFactory } from './gameRequestFactory';
 
 export class Game extends messageSubscriber{
-    static instance:Game;
-    
+    private serverSide: boolean = false;
     protected sender: RequestSender;
     protected camera: Camera;
     protected collisionSystem: SpatialHashmap;
     protected scene: Scene;
-
 
 
     protected mousePosition:Vector2 = new Vector2(0,0); 
@@ -31,15 +29,13 @@ export class Game extends messageSubscriber{
         this.scene = new defaultScene(); 
     }
 
-    static getInstance(){
-        if(!Game.instance){
-            Game.instance = new Game();
-        }
-        return Game.instance;
+    setServerSide (serverSide: boolean) {
+        this.serverSide = serverSide;
     }
 
-    setScene(scene: any){
+    setScene(scene: Scene){
         this.scene = scene;
+        this.scene.setServerSide(this.serverSide);
         this.scene.attachGame(this);
     }
 
@@ -55,37 +51,22 @@ export class Game extends messageSubscriber{
         this.RemoteRequestQueue.push(req);
     }
 
-    onRequest(req: gameRequest){
-
-        if (req.Type == "SpawnObject"){
-            var cls:any = this.scene.getTypeRegistry().getTypeClass(req.Metadata.objectData.Type)
-            this.scene.addObject((cls)!.fromSerialized(req.Metadata.objectData));
-        }else
-
-        if (req.Type == "DestroyObject"){
-            this.scene.removeObjectById(req.Metadata.objectData.id);
-        }else
-
-        if(req.Type == "FullState"){
-            this.scene.UpdateState(req.Metadata.objectData);
-        }else
-
-        if (req.Type == "UpdateObject"){
-            this.scene.updateObject(req.Metadata.objectData.id,req.Metadata.objectData);
-        }
-
+    start(p:p5){
+        this.sender.sendRequest(gameRequestFactory.getFullStateRequest());
     }
 
-    start(p:p5){
-        
-        this.sender.sendRequest(gameRequestFactory.getFullStateRequest());
+    Serverstart(){
 
     }
 
     Mstart(p:p5){
         this.start(p);
         this.scene.Mstart(p);
-        
+    }
+
+    ServerMstart(){
+        this.Serverstart();
+        this.scene.ServerMstart();
     }
 
     private lastUpdateTime: number = Date.now(); 
@@ -102,6 +83,18 @@ export class Game extends messageSubscriber{
         
         this.collisionSystem.getHashMap().clear();
         this.scene.Mupdate(p, this.deltaTime );
+        this.collisionSystem.update();
+    }
+
+    ServerMupdate(){
+        const now = Date.now();
+        this.deltaTime = now - this.lastUpdateTime;
+        this.lastUpdateTime = now; 
+    
+        this.handleRemoteRequests();
+        
+        this.collisionSystem.getHashMap().clear();
+        //this.scene.ServerMupdate(this.deltaTime);
         this.collisionSystem.update();
     }
     
@@ -126,11 +119,6 @@ export class Game extends messageSubscriber{
         p.textSize(32);
         p.fill("black");
         p.text("FPS: " + Math.round(1000/this.deltaTime), 500, 30);
-    }
-    
-    runFrame(p:p5){
-        this.Mupdate(p);
-        this.draw(p);
     }
 
     getnewLocalObjectId(): number {

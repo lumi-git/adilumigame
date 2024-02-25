@@ -1,11 +1,14 @@
+import AbsSocketWrapper from "../SocketUtils/AbsSocketWrapprt";
+import ServerSocketWrapper from "../SocketUtils/ServerSocketWrapper";
 import  socketWrapper  from "../SocketUtils/socketWrapper"
 import type { gameRequest } from "./gameRequest";
 
 
 export class RequestSender {
-    socket: socketWrapper;
-    constructor() {
-        this.socket = socketWrapper.getInstance();
+    socket: AbsSocketWrapper;
+
+    setSocket(socket: AbsSocketWrapper) {
+        this.socket = socket;
     }
 
     sendRequest(req: gameRequest) {
